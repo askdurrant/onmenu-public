@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "askdurrant.com.onmenu.app"
+        ],
+        "components": [
+          {
+            "/": "/join/*",
+            "comment": "Recipe book invite links"
+          }
+        ]
+      }
+    ]
+  }
+}

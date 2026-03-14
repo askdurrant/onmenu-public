@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onmenu</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #FAF7F2;
+      --header: #C4623A;
+      --header-dark: #A8512D;
+      --text: #2C1810;
+      --text-mid: #6B5744;
+      --text-muted: #A08975;
+      --border: #E8DDD0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .logo-mark {
+      width: 72px;
+      height: 72px;
+      background: linear-gradient(135deg, var(--header-dark), var(--header));
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 24px;
+      box-shadow: 0 8px 24px rgba(196, 98, 58, 0.3);
+    }
+
+    .logo-mark svg { width: 36px; height: 36px; }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 300;
+      letter-spacing: -0.6px;
+      color: var(--text);
+      margin-bottom: 10px;
+    }
+
+    #status {
+      font-size: 16px;
+      color: var(--text-mid);
+      margin-bottom: 32px;
+      min-height: 24px;
+    }
+
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--header);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin: 0 auto 32px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--header);
+      color: #fff;
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      box-shadow: 0 4px 16px rgba(196, 98, 58, 0.3);
+      transition: background 0.15s;
+    }
+
+    .store-btn:hover { background: var(--header-dark); }
+
+    .not-found {
+      display: none;
+    }
+
+    .home-link {
+      display: block;
+      margin-top: 20px;
+      font-size: 14px;
+      color: var(--text-muted);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .home-link:hover { color: var(--header); }
+
+    .error-code {
+      font-size: 80px;
+      font-weight: 200;
+      color: var(--border);
+      letter-spacing: -4px;
+      line-height: 1;
+      margin-bottom: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="logo-mark">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
+      <path d="M4 6h16M4 12h10M4 18h7"/>
+    </svg>
+  </div>
+
+  <!-- Join redirect state -->
+  <div id="join-view">
+    <h1>Opening Onmenu&hellip;</h1>
+    <p id="status">Launching the app</p>
+    <div class="spinner" id="spinner"></div>
+    <a id="store-link" class="store-btn" href="https://apps.apple.com/app/onmenu/id0" style="display:none;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+      </svg>
+      Get Onmenu on the App Store
+    </a>
+  </div>
+
+  <!-- True 404 state -->
+  <div id="notfound-view" style="display:none;">
+    <div class="error-code">404</div>
+    <h1>Page not found</h1>
+    <p id="notfound-msg" style="font-size:15px;color:var(--text-mid);margin-bottom:28px;">The link you followed may be expired or incorrect.</p>
+    <a href="/" class="store-btn" style="background:var(--text);">Back to Onmenu</a>
+  </div>
+
+<script>
+  (function () {
+    var path = window.location.pathname;
+
+    // /join/TOKEN — deep link into app
+    var joinMatch = path.match(/^\/join\/([A-Za-z0-9]{4,32})\/?$/);
+
+    if (joinMatch) {
+      var token = joinMatch[1];
+      var deepLink = 'onmenu://join/' + token;
+
+      // Attempt to open the app
+      window.location.href = deepLink;
+
+      // After 2.5s, if still here, show App Store fallback
+      setTimeout(function () {
+        document.getElementById('spinner').style.display = 'none';
+        document.getElementById('status').textContent = "Couldn't open Onmenu automatically.";
+        var storeLink = document.getElementById('store-link');
+        storeLink.style.display = 'inline-flex';
+      }, 2500);
+
+    } else {
+      // Not a known route — show 404
+      document.getElementById('join-view').style.display = 'none';
+      document.getElementById('notfound-view').style.display = 'block';
+    }
+  })();
+</script>
+
+</body>
+</html>
