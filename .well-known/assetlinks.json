@@ -1,10 +1,13 @@
 [
   {
-    "relation": ["delegate_permission/common.handle_all_urls"],
+    "relation": [
+      "delegate_permission/common.handle_all_urls"
+    ],
     "target": {
       "namespace": "android_app",
       "package_name": "com.onmenu.app",
       "sha256_cert_fingerprints": [
+        "F7:96:41:AE:D8:14:DB:8A:2E:D6:2D:61:D1:33:03:26:B5:9B:98:9A:6C:1A:C8:44:D0:15:A0:E8:AA:3F:76:E8",
         "AC:34:0F:47:3E:D7:34:18:34:54:48:8E:24:FF:7C:CA:51:67:B7:90:4E:B5:FC:28:8D:D7:60:BC:A0:3F:79:DD"
       ]
     }
