@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete your account — Onmenu</title>
+  <meta name="description" content="How to delete your Onmenu account and what happens to your data.">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #FAF7F2;
+      --card: #FFFFFF;
+      --header: #C4623A;
+      --header-dark: #A8512D;
+      --text: #2C1810;
+      --text-mid: #6B5744;
+      --text-muted: #A08975;
+      --border: #E8DDD0;
+      --separator: #EDE5DA;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      background: rgba(250, 247, 242, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--separator);
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo-mark {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--header-dark), var(--header));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-logo-mark svg { width: 18px; height: 18px; }
+    .nav-brand { font-size: 17px; font-weight: 600; color: var(--text); letter-spacing: -0.3px; }
+
+    .nav-back { font-size: 14px; color: var(--text-muted); text-decoration: none; transition: color 0.15s; }
+    .nav-back:hover { color: var(--header); }
+
+    .page-header {
+      background: linear-gradient(135deg, var(--header-dark), var(--header));
+      padding: 56px 24px 48px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .page-header h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 300;
+      letter-spacing: -1px;
+      margin-bottom: 8px;
+    }
+
+    .page-header p { font-size: 14px; opacity: 0.75; }
+
+    .content {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 56px 24px 80px;
+    }
+
+    .toc {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 24px 28px;
+      margin-bottom: 48px;
+    }
+
+    .toc h2 { font-size: 13px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
+
+    .toc ol { padding-left: 20px; }
+    .toc li { margin-bottom: 6px; }
+    .toc a { font-size: 14px; color: var(--header); text-decoration: none; transition: opacity 0.15s; }
+    .toc a:hover { opacity: 0.75; }
+
+    section { margin-bottom: 48px; }
+
+    section h2 {
+      font-size: 22px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.4px;
+      margin-bottom: 16px;
+      padding-top: 8px;
+    }
+
+    section p, section li { font-size: 15px; color: var(--text-mid); margin-bottom: 12px; }
+    section ul, section ol { padding-left: 20px; }
+    section li { margin-bottom: 8px; }
+
+    strong { color: var(--text); font-weight: 600; }
+
+    .callout {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--header);
+      border-radius: 0 12px 12px 0;
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 14px;
+      color: var(--text-mid);
+    }
+
+    footer {
+      border-top: 1px solid var(--separator);
+      padding: 32px 24px;
+      text-align: center;
+    }
+
+    footer a { font-size: 14px; color: var(--header); text-decoration: none; }
+    footer p { font-size: 13px; color: var(--text-muted); margin-top: 8px; }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <div class="nav-logo-mark">
+      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round">
+        <path d="M4 6h16M4 12h10M4 18h7"/>
+      </svg>
+    </div>
+    <span class="nav-brand">Onmenu</span>
+  </a>
+  <a href="/" class="nav-back">← Home</a>
+</nav>
+
+<div class="page-header">
+  <h1>Delete your account</h1>
+  <p>Onmenu: Family Recipe Book</p>
+</div>
+
+<div class="content">
+
+  <section id="in-app">
+    <h2>In the app</h2>
+    <ol>
+      <li>Open Onmenu and go to the <strong>Profile</strong> tab.</li>
+      <li>Scroll to the bottom and tap <strong>Delete account</strong>.</li>
+      <li>Confirm. Your account is deleted straight away.</li>
+    </ol>
+  </section>
+
+  <section id="email">
+    <h2>Without the app</h2>
+    <p>Email <strong>hello@onmenu.recipes</strong> from the address you sign in with (your Apple or Google email), asking us to delete your account. We'll confirm and delete it within 30 days.</p>
+  </section>
+
+  <section id="deleted">
+    <h2>What's deleted</h2>
+    <ul>
+      <li>Your account: your name, email address and sign-in details.</li>
+      <li>Recipe books that only you are in, and the recipes in them.</li>
+      <li>Your notes and reviews on any recipe.</li>
+      <li>Your place in books shared with you, and any invites you've made.</li>
+      <li>Your settings and import history.</li>
+    </ul>
+  </section>
+
+  <section id="kept">
+    <h2>What's kept</h2>
+    <ul>
+      <li>Recipes you added to a book <strong>shared with other people</strong> stay in that book for them, shown as by "Deleted user". Your name and email aren't kept with them. If you'd rather remove them, delete those recipes before deleting your account.</li>
+      <li>If you bought Onmenu Pro, the purchase record is kept by Apple or Google, and by RevenueCat (who handles purchases for us), as their policies and the law require.</li>
+    </ul>
+    <p>See our <a href="/privacy" style="color:var(--header);">privacy policy</a> for more.</p>
+  </section>
+
+</div>
+
+<footer>
+  <a href="/">← Back to Onmenu</a>
+  <p>&copy; 2026 Onmenu. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
