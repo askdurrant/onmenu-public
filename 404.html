@@ -111,6 +111,17 @@
       line-height: 1;
       margin-bottom: 16px;
     }
+
+    #join-view, #notfound-view { width: 100%; max-width: 420px; }
+    .lead { font-size: 16px; line-height: 1.5; color: var(--text-mid); max-width: 340px; margin: 0 auto 24px; }
+    .code-box { display: inline-flex; align-items: center; gap: 12px; background: #fff; border: 1px solid var(--border); border-radius: 14px; padding: 12px 12px 12px 22px; margin-bottom: 28px; }
+    .code { font-size: 28px; font-weight: 600; letter-spacing: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .copy-btn { border: 1px solid var(--border); background: var(--bg); color: var(--text); border-radius: 10px; padding: 8px 14px; font-size: 14px; font-weight: 600; cursor: pointer; font-family: inherit; }
+    .stores { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 28px; }
+    .store-btn-quiet { background: #fff; color: var(--text); border: 1px solid var(--border); box-shadow: none; }
+    .store-btn-quiet:hover { background: var(--bg); }
+    .steps { text-align: left; max-width: 340px; margin: 0 auto; padding-left: 20px; font-size: 15px; line-height: 1.6; color: var(--text-mid); }
+    .steps li { margin-bottom: 6px; }
   </style>
 </head>
 <body>
@@ -121,17 +132,35 @@
     </svg>
   </div>
 
-  <!-- Join redirect state -->
+  <!-- Invite: someone without the app (with the app, the link opens Onmenu directly) -->
   <div id="join-view">
-    <h1>Opening Onmenu&hellip;</h1>
-    <p id="status">Launching the app</p>
-    <div class="spinner" id="spinner"></div>
-    <a id="store-link" class="store-btn" href="https://apps.apple.com/app/onmenu/id0" style="display:none;">
-      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+    <h1>You're invited to a recipe book</h1>
+    <p class="lead">Onmenu keeps your family's recipes in one place. Get the free app, then join with this code:</p>
+
+    <div class="code-box">
+      <span id="code" class="code"></span>
+      <button id="copy" class="copy-btn" type="button">Copy</button>
+    </div>
+
+    <div class="stores" id="stores">
+      <a id="app-store" class="store-btn" href="https://apps.apple.com/gb/app/onmenu-family-recipe-book/id6760461548">
+        <svg width="20" height="20" aria-hidden="true" viewBox="0 0 24 24" fill="currentColor">
         <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
       </svg>
-      Get Onmenu on the App Store
-    </a>
+        App Store
+      </a>
+      <a id="play-store" class="store-btn" href="https://play.google.com/store/apps/details?id=com.onmenu.app">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3.6 1.8 13.8 12 3.6 22.2c-.4-.2-.6-.6-.6-1.1V2.9c0-.5.2-.9.6-1.1Zm11.6 11.6 2.4 2.4-11.2 6.4 8.8-8.8Zm3.9-3.9 2.9 1.6c.6.4.6 1.4 0 1.8l-2.9 1.6-2.6-2.6 2.6-2.4ZM6.4 1.8l11.2 6.4-2.4 2.4-8.8-8.8Z"/></svg>
+        Google Play
+      </a>
+    </div>
+
+    <ol class="steps">
+      <li>Install Onmenu and sign in.</li>
+      <li>Tap this link again, or go to <strong>Books → Join a book</strong> and enter the code.</li>
+    </ol>
+
+    <a id="open-app" class="home-link" href="#">Already have Onmenu? Open it</a>
   </div>
 
   <!-- True 404 state -->
@@ -150,19 +179,26 @@
     var joinMatch = path.match(/^\/join\/([A-Za-z0-9]{4,32})\/?$/);
 
     if (joinMatch) {
-      var token = joinMatch[1];
-      var deepLink = 'onmenu://join/' + token;
+      var code = joinMatch[1].toUpperCase();
+      document.title = 'Join a recipe book on Onmenu';
+      document.getElementById('code').textContent = code;
+      document.getElementById('open-app').href = 'onmenu://join/' + code;
 
-      // Attempt to open the app
-      window.location.href = deepLink;
+      // Put the visitor's own store first (both show on a computer)
+      var ua = navigator.userAgent;
+      var isAndroid = /Android/i.test(ua);
+      var isApple = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+      var stores = document.getElementById('stores');
+      if (isAndroid) stores.insertBefore(document.getElementById('play-store'), stores.firstChild);
+      if (isAndroid || isApple) {
+        stores.lastElementChild.classList.add('store-btn-quiet');
+      }
 
-      // After 2.5s, if still here, show App Store fallback
-      setTimeout(function () {
-        document.getElementById('spinner').style.display = 'none';
-        document.getElementById('status').textContent = "Couldn't open Onmenu automatically.";
-        var storeLink = document.getElementById('store-link');
-        storeLink.style.display = 'inline-flex';
-      }, 2500);
+      document.getElementById('copy').addEventListener('click', function () {
+        var btn = this;
+        var done = function () { btn.textContent = 'Copied'; setTimeout(function () { btn.textContent = 'Copy'; }, 2000); };
+        if (navigator.clipboard) navigator.clipboard.writeText(code).then(done, function () {});
+      });
 
     } else {
       // Not a known route — show 404
