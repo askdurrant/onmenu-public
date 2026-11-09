@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Onmenu</title>
+  <meta name="description" content="Onmenu keeps your family's recipes in one place. Get it on the App Store or Google Play.">
+  <meta property="og:title" content="Onmenu: Family Recipe Book">
+  <meta property="og:description" content="Save recipes from any link or photo, share them with family, and cook step by step.">
+  <script>
+    // Shared from the app: send each phone straight to its store; computers see the choice below.
+    (function () {
+      var ua = navigator.userAgent;
+      var apple = /iPhone|iPad|iPod/i.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+      if (/Android/i.test(ua)) location.replace('https://play.google.com/store/apps/details?id=com.onmenu.app');
+      else if (apple) location.replace('https://apps.apple.com/gb/app/onmenu-family-recipe-book/id6760461548');
+    })();
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root { --bg: #FAF7F2; --header: #C4623A; --text: #2C1810; --text-mid: #6B5744; --border: #E8DDD0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text);
+      min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; text-align: center; }
+    main { width: 100%; max-width: 420px; }
+    h1 { font-size: 28px; font-weight: 300; letter-spacing: -0.6px; margin-bottom: 10px; }
+    p { font-size: 16px; line-height: 1.5; color: var(--text-mid); margin-bottom: 28px; }
+    .stores { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-bottom: 24px; }
+    .store-btn { display: inline-flex; align-items: center; gap: 10px; background: var(--header); color: #fff; text-decoration: none;
+      padding: 14px 28px; border-radius: 14px; font-size: 16px; font-weight: 600; }
+    a.more { font-size: 14px; color: var(--text-mid); }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Get Onmenu</h1>
+    <p>Your family's recipes in one place. Save them from any link or photo, share them with family, and cook step by step.</p>
+    <div class="stores">
+      <a class="store-btn" href="https://apps.apple.com/gb/app/onmenu-family-recipe-book/id6760461548">App Store</a>
+      <a class="store-btn" href="https://play.google.com/store/apps/details?id=com.onmenu.app">Google Play</a>
+    </div>
+    <a class="more" href="/">More about Onmenu</a>
+  </main>
+</body>
+</html>
