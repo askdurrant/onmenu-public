@@ -9,6 +9,10 @@
           {
             "/": "/join/*",
             "comment": "Recipe book invite links"
+          },
+          {
+            "/": "/r/*",
+            "comment": "Shared recipes"
           }
         ]
       }

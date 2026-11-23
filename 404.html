@@ -122,6 +122,20 @@
     .store-btn-quiet:hover { background: var(--bg); }
     .steps { text-align: left; max-width: 340px; margin: 0 auto; padding-left: 20px; font-size: 15px; line-height: 1.6; color: var(--text-mid); }
     .steps li { margin-bottom: 6px; }
+
+    #recipe-view { width: 100%; max-width: 620px; text-align: left; }
+    #recipe-view .lead { text-align: center; }
+    .recipe-img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 18px; margin-bottom: 20px; }
+    #recipe-view h1 { text-align: left; font-size: 32px; font-weight: 400; }
+    #recipe-view h2 { font-size: 22px; font-weight: 400; margin: 24px 0 8px; }
+    .recipe-meta { color: var(--text-mid); font-size: 15px; margin-bottom: 12px; }
+    .recipe-desc { font-size: 16px; line-height: 1.6; }
+    .recipe-list { list-style: none; }
+    .recipe-list li { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 16px; }
+    .recipe-steps { padding-left: 22px; }
+    .recipe-steps li { padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 16px; line-height: 1.6; }
+    .recipe-cta { text-align: center; margin-top: 36px; padding: 24px; background: #fff; border: 1px solid var(--border); border-radius: 18px; }
+    .recipe-cta p { margin-bottom: 16px; color: var(--text-mid); }
   </style>
 </head>
 <body>
@@ -163,6 +177,29 @@
     <a id="open-app" class="home-link" href="#">Already have Onmenu? Open it</a>
   </div>
 
+  <!-- A recipe shared by link (onmenu.recipes/r/TOKEN), for people without Onmenu -->
+  <div id="recipe-view" style="display:none;">
+    <p id="recipe-status" class="lead">Loading the recipe&hellip;</p>
+    <article id="recipe" style="display:none;">
+      <img id="recipe-img" class="recipe-img" alt="" style="display:none;">
+      <h1 id="recipe-title"></h1>
+      <p id="recipe-meta" class="recipe-meta"></p>
+      <p id="recipe-desc" class="recipe-desc"></p>
+      <h2>Ingredients</h2>
+      <ul id="recipe-ingredients" class="recipe-list"></ul>
+      <h2>Method</h2>
+      <ol id="recipe-steps" class="recipe-steps"></ol>
+    </article>
+    <div class="recipe-cta">
+      <p>Keep it in your own recipe book with Onmenu, free.</p>
+      <div class="stores" id="recipe-stores">
+        <a class="store-btn store-apple" href="https://apps.apple.com/gb/app/onmenu-family-recipe-book/id6760461548">App Store</a>
+        <a class="store-btn store-play" href="https://play.google.com/store/apps/details?id=com.onmenu.app">Google Play</a>
+      </div>
+      <a id="recipe-open" class="home-link" href="#">Already have Onmenu? Open it there</a>
+    </div>
+  </div>
+
   <!-- True 404 state -->
   <div id="notfound-view" style="display:none;">
     <div class="error-code">404</div>
@@ -176,6 +213,52 @@
     var path = window.location.pathname;
 
     // /join/TOKEN — deep link into app
+    // /r/TOKEN: a shared recipe
+    var recipeMatch = path.match(/^\/r\/([A-Za-z0-9_-]{6,32})\/?$/);
+    if (recipeMatch) {
+      var rtoken = recipeMatch[1];
+      document.getElementById('join-view').style.display = 'none';
+      document.getElementById('recipe-view').style.display = 'block';
+      document.getElementById('recipe-open').href = 'onmenu://r/' + rtoken;
+      if (/Android/i.test(navigator.userAgent)) {
+        var rs = document.getElementById('recipe-stores');
+        rs.insertBefore(rs.querySelector('.store-play'), rs.firstChild);
+      }
+      var el = function (id) { return document.getElementById(id); };
+      fetch('https://api-production-7116.up.railway.app/api/v1/shared/recipes/' + rtoken)
+        .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+        .then(function (rec) {
+          // Everything goes in as text, never HTML
+          document.title = rec.title + ' · Onmenu';
+          el('recipe-title').textContent = rec.title;
+          var meta = [];
+          if (rec.prepMinutes) meta.push('Prep ' + rec.prepMinutes + ' min');
+          if (rec.cookMinutes) meta.push('Cook ' + rec.cookMinutes + ' min');
+          meta.push('Serves ' + rec.servesDefault);
+          el('recipe-meta').textContent = meta.join(' · ');
+          el('recipe-desc').textContent = rec.description || '';
+          if (rec.imageUrl && /^https:\/\//.test(rec.imageUrl)) { el('recipe-img').src = rec.imageUrl; el('recipe-img').style.display = 'block'; }
+          (rec.ingredients || []).forEach(function (i) {
+            var li = document.createElement('li');
+            var q = [i.qty != null ? i.qty : '', i.unit || ''].join(' ').trim();
+            if (q) { var b = document.createElement('strong'); b.textContent = q + ' '; li.appendChild(b); }
+            li.appendChild(document.createTextNode(i.name));
+            el('recipe-ingredients').appendChild(li);
+          });
+          (rec.steps || []).forEach(function (st) {
+            var li = document.createElement('li');
+            li.textContent = st.text;
+            el('recipe-steps').appendChild(li);
+          });
+          el('recipe-status').style.display = 'none';
+          el('recipe').style.display = 'block';
+        })
+        .catch(function () {
+          el('recipe-status').textContent = "We couldn't find this recipe. The link may be mistyped, or the recipe has been deleted.";
+        });
+      return;
+    }
+
     var joinMatch = path.match(/^\/join\/([A-Za-z0-9]{4,32})\/?$/);
 
     if (joinMatch) {
